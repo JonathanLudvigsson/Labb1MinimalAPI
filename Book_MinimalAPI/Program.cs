@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using FluentValidation;
 using Book_MinimalAPI.Validators;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Book_MinimalAPI
 {
@@ -80,7 +81,7 @@ namespace Book_MinimalAPI
 
             app.Run();
 
-            static async Task<IResult> GetAllBooks(IBookRepository bookRepo)
+            static async Task<IResult> GetAllBooks([FromServices] IBookRepository bookRepo)
             {
                 IEnumerable<Book> result = await bookRepo.GetAll();
                 if (result is IEnumerable<Book>)
@@ -91,7 +92,7 @@ namespace Book_MinimalAPI
                 return TypedResults.NotFound();
             }
 
-            static async Task<IResult> GetBook(int id, IBookRepository bookRepo)
+            static async Task<IResult> GetBook([FromRoute] int id, [FromServices] IBookRepository bookRepo)
             {
                 Book result = await bookRepo.GetSingle(id);
                 if (result is Book)
@@ -101,7 +102,7 @@ namespace Book_MinimalAPI
                 return TypedResults.NotFound();
             }
 
-            static async Task<IResult> GetBooksFromAuthor(string authorName, IBookRepository bookRepo)
+            static async Task<IResult> GetBooksFromAuthor(string authorName, [FromServices] IBookRepository bookRepo)
             {
                 IEnumerable<Book> result = await bookRepo.GetFromAuthor(authorName);
                 if (!result.IsNullOrEmpty())
@@ -111,7 +112,7 @@ namespace Book_MinimalAPI
                 return TypedResults.NotFound();
             }
 
-            static async Task<IResult> CreateBook(BookDTO bookDTO, IMapper _mapper, IValidator<BookDTO> _validator, IBookRepository bookRepo)
+            static async Task<IResult> CreateBook([FromBody] BookDTO bookDTO, [FromServices] IMapper _mapper, [FromServices] IValidator<BookDTO> _validator, [FromServices] IBookRepository bookRepo)
             {
                 var validationResult = await _validator.ValidateAsync(bookDTO);
                 if (!validationResult.IsValid)
@@ -128,7 +129,7 @@ namespace Book_MinimalAPI
                 return TypedResults.BadRequest();
             }
 
-            static async Task<IResult> UpdateBook(int id, BookDTO bookDTO, IMapper _mapper, IValidator<BookDTO> _validator, IBookRepository bookRepo)
+            static async Task<IResult> UpdateBook([FromRoute] int id, [FromBody] BookDTO bookDTO, [FromServices] IMapper _mapper, [FromServices] IValidator<BookDTO> _validator, [FromServices] IBookRepository bookRepo)
             {
                 var validationResult = await _validator.ValidateAsync(bookDTO);
                 if (!validationResult.IsValid)
@@ -145,7 +146,7 @@ namespace Book_MinimalAPI
                 return TypedResults.NotFound();
             }
 
-            static async Task<IResult> DeleteBook(int id, IBookRepository bookRepo)
+            static async Task<IResult> DeleteBook([FromRoute] int id, [FromServices] IBookRepository bookRepo)
             {
                 Book result = await bookRepo.Delete(id);
                 if (result is Book)
