@@ -46,17 +46,37 @@ namespace Book_MinimalAPI
 
             var booksApi = app.MapGroup("/api/book");
 
-            booksApi.MapGet("/", GetAllBooks).Produces<IEnumerable<Book>>(StatusCodes.Status200OK).Produces(StatusCodes.Status404NotFound).WithName("GetAllBooks");
+            booksApi.MapGet("/", GetAllBooks)
+                .Produces<IEnumerable<Book>>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound)
+                .WithName("GetAllBooks");
 
-            booksApi.MapGet("/{id:int}", GetBook).Produces<Book>(StatusCodes.Status200OK).Produces(StatusCodes.Status404NotFound).WithName("GetBook");
+            booksApi.MapGet("/{id:int}", GetBook)
+                .Produces<Book>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound)
+                .WithName("GetBook");
 
-            booksApi.MapGet("/{author}", GetBooksFromAuthor).Produces<IEnumerable<Book>>(StatusCodes.Status200OK).Produces(StatusCodes.Status404NotFound).WithName("GetBooksFromAuthor");
+            booksApi.MapGet("/{author}", GetBooksFromAuthor)
+                .Produces<IEnumerable<Book>>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound)
+                .WithName("GetBooksFromAuthor");
 
-            booksApi.MapPost("/", CreateBook).Accepts<BookDTO>("application/json").Produces<Book>(StatusCodes.Status200OK).Produces(StatusCodes.Status400BadRequest).WithName("CreateBook");
+            booksApi.MapPost("/", CreateBook)
+                .Accepts<BookDTO>("application/json")
+                .Produces<Book>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status400BadRequest)
+                .WithName("CreateBook");
 
-            booksApi.MapPut("/{id:int}", UpdateBook).Accepts<BookDTO>("application/json").Produces<Book>(StatusCodes.Status200OK).Produces(StatusCodes.Status404NotFound).WithName("UpdateBook");
+            booksApi.MapPut("/{id:int}", UpdateBook)
+                .Accepts<BookDTO>("application/json")
+                .Produces<Book>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound)
+                .WithName("UpdateBook");
 
-            booksApi.MapDelete("/{id:int}", DeleteBook).Produces<Book>(StatusCodes.Status200OK).Produces(StatusCodes.Status404NotFound).WithName("DeleteBook");
+            booksApi.MapDelete("/{id:int}", DeleteBook)
+                .Produces<Book>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound)
+                .WithName("DeleteBook");
 
             app.Run();
 
