@@ -64,13 +64,15 @@ namespace Book_MinimalAPI
 
             booksApi.MapPost("/", CreateBook)
                 .Accepts<BookDTO>("application/json")
-                .Produces<Book>(StatusCodes.Status200OK)
-                .Produces(StatusCodes.Status400BadRequest)
+                .Produces<Book>(StatusCodes.Status201Created)
+                .Produces<List<FluentValidation.Results.ValidationFailure>>(StatusCodes.Status400BadRequest)
+                .Produces<BookDTO>(StatusCodes.Status422UnprocessableEntity)
                 .WithName("CreateBook");
 
             booksApi.MapPut("/{id:int}", UpdateBook)
                 .Accepts<BookDTO>("application/json")
                 .Produces<Book>(StatusCodes.Status200OK)
+                .Produces<List<FluentValidation.Results.ValidationFailure>>(StatusCodes.Status400BadRequest)
                 .Produces(StatusCodes.Status404NotFound)
                 .WithName("UpdateBook");
 
@@ -126,7 +128,7 @@ namespace Book_MinimalAPI
                 {
                     return TypedResults.Created($"/api/book/{result.Id}", result);
                 }
-                return TypedResults.BadRequest();
+                return TypedResults.UnprocessableEntity(bookDTO);
             }
 
             static async Task<IResult> UpdateBook([FromRoute] int id, [FromBody] BookDTO bookDTO, [FromServices] IMapper _mapper, [FromServices] IValidator<BookDTO> _validator, [FromServices] IBookRepository bookRepo)

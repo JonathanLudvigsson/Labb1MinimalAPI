@@ -11,7 +11,6 @@ namespace Book_MinimalAPI.Validators
             RuleFor(model => model.Name).Length(1, 60);
             RuleFor(model => model.Author).NotEmpty();
             RuleFor(model => model.Author).Length(1, 60);
-            RuleFor(model => model.Available).NotEmpty();
         }
     }
 }
