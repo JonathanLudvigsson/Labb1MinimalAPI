@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Book_MinimalAPI.Validators
 {
-    public class BookCreateValidator : AbstractValidator<BookDTO>
+    public class BookCreateValidator : AbstractValidator<BookEditDTO>
     {
         public BookCreateValidator()
         {

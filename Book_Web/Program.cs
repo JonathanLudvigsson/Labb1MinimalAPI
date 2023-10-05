@@ -1,3 +1,5 @@
+using Book_Web.Services;
+
 namespace Book_Web
 {
     public class Program
@@ -8,6 +10,10 @@ namespace Book_Web
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpClient<IBookService, BookService>();
+            builder.Services.AddScoped<IBookService, BookService>();
+
+            StaticDetails.BookApiBase = builder.Configuration["ServiceUrls:BookAPI"];
 
             var app = builder.Build();
 

@@ -57,7 +57,7 @@ namespace Book_MinimalAPI
                 .Produces(StatusCodes.Status404NotFound)
                 .WithName("GetBook");
 
-            booksApi.MapGet("/{author}", GetBooksFromAuthor)
+            booksApi.MapGet("/{authorName}", GetBooksFromAuthor)
                 .Produces<IEnumerable<Book>>(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status404NotFound)
                 .WithName("GetBooksFromAuthor");
@@ -85,77 +85,112 @@ namespace Book_MinimalAPI
 
             static async Task<IResult> GetAllBooks([FromServices] IBookRepository bookRepo)
             {
-                IEnumerable<Book> result = await bookRepo.GetAll();
-                if (result is IEnumerable<Book>)
+                APIResponse response = new APIResponse { Success = false, StatusCode = System.Net.HttpStatusCode.NotFound  };
+                response.Result = await bookRepo.GetAll();
+                if (response.Result is IEnumerable<Book>)
                 {
-                    return TypedResults.Ok(result);
+                    response.Success = true;
+                    response.StatusCode = System.Net.HttpStatusCode.OK;
+                    return TypedResults.Ok(response);
                 }
 
-                return TypedResults.NotFound();
+                response.ErrorMessages.Add("Book list not found.");
+                return TypedResults.NotFound(response);
             }
 
             static async Task<IResult> GetBook([FromRoute] int id, [FromServices] IBookRepository bookRepo)
             {
-                Book result = await bookRepo.GetSingle(id);
-                if (result is Book)
+                APIResponse response = new APIResponse { Success = false, StatusCode = System.Net.HttpStatusCode.NotFound };
+                response.Result = await bookRepo.GetSingle(id);
+                if (response.Result is Book)
                 {
-                    return TypedResults.Ok(result);
+                    response.Success = true;
+                    response.StatusCode = System.Net.HttpStatusCode.OK;
+                    return TypedResults.Ok(response);
                 }
-                return TypedResults.NotFound();
+                response.ErrorMessages.Add($"Book with id {id} not found.");
+                return TypedResults.NotFound(response);
             }
 
             static async Task<IResult> GetBooksFromAuthor(string authorName, [FromServices] IBookRepository bookRepo)
             {
-                IEnumerable<Book> result = await bookRepo.GetFromAuthor(authorName);
-                if (!result.IsNullOrEmpty())
+                APIResponse response = new APIResponse { Success = false, StatusCode = System.Net.HttpStatusCode.NotFound };
+                var res = await bookRepo.GetFromAuthor(authorName);
+                response.Result = res;
+                if (res.Any())
                 {
-                    return TypedResults.Ok(result);
+                    response.Success = true;
+                    response.StatusCode = System.Net.HttpStatusCode.OK;
+                    return TypedResults.Ok(response);
                 }
-                return TypedResults.NotFound();
+                response.ErrorMessages.Add($"No books from author {authorName} found.");
+                return TypedResults.NotFound(response);
             }
 
-            static async Task<IResult> CreateBook([FromBody] BookDTO bookDTO, [FromServices] IMapper _mapper, [FromServices] IValidator<BookDTO> _validator, [FromServices] IBookRepository bookRepo)
+            static async Task<IResult> CreateBook([FromBody] BookEditDTO bookDTO, [FromServices] IMapper _mapper, [FromServices] IValidator<BookEditDTO> _validator, [FromServices] IBookRepository bookRepo)
             {
+                APIResponse response = new APIResponse { Success = false, StatusCode = System.Net.HttpStatusCode.UnprocessableEntity };
                 var validationResult = await _validator.ValidateAsync(bookDTO);
                 if (!validationResult.IsValid)
                 {
-                    return TypedResults.BadRequest(validationResult.Errors);
+                    foreach (var v in validationResult.Errors)
+                    {
+                        response.ErrorMessages.Add(v.ToString());
+                    }
+                    response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                    return TypedResults.BadRequest(response);
                 }
 
                 Book bookToAdd = _mapper.Map<Book>(bookDTO);
-                Book result = await bookRepo.Create(bookToAdd);
-                if (result is Book)
+                response.Result = await bookRepo.Create(bookToAdd);
+                if (response.Result is Book)
                 {
-                    return TypedResults.Created($"/api/book/{result.Id}", result);
+                    response.Success = true;
+                    response.StatusCode = System.Net.HttpStatusCode.Created;
+                    return TypedResults.Created($"/api/book/{bookToAdd.Id}", response);
                 }
-                return TypedResults.UnprocessableEntity(bookDTO);
+                response.ErrorMessages.Add("Error in JSON data, please check your formating is valid.");
+                return TypedResults.UnprocessableEntity(response);
             }
 
-            static async Task<IResult> UpdateBook([FromRoute] int id, [FromBody] BookDTO bookDTO, [FromServices] IMapper _mapper, [FromServices] IValidator<BookDTO> _validator, [FromServices] IBookRepository bookRepo)
+            static async Task<IResult> UpdateBook([FromRoute] int id, [FromBody] BookEditDTO bookDTO, [FromServices] IMapper _mapper, [FromServices] IValidator<BookEditDTO> _validator, [FromServices] IBookRepository bookRepo)
             {
+                APIResponse response = new APIResponse { Success = false, StatusCode = System.Net.HttpStatusCode.NotFound };
                 var validationResult = await _validator.ValidateAsync(bookDTO);
                 if (!validationResult.IsValid)
                 {
-                    return TypedResults.BadRequest(validationResult.Errors);
+                    foreach (var v in validationResult.Errors)
+                    {
+                        response.ErrorMessages.Add(v.ToString());
+                    }
+                    response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                    return TypedResults.BadRequest(response);
                 }
 
                 Book updatedBook = _mapper.Map<Book>(bookDTO);
-                Book result = await bookRepo.Update(id, updatedBook);
-                if (result is Book)
+                response.Result = await bookRepo.Update(id, updatedBook);
+                if (response.Result is Book)
                 {
-                    return TypedResults.Ok(result);
+                    response.Success = true;
+                    response.StatusCode = System.Net.HttpStatusCode.OK;
+                    return TypedResults.Ok(response);
                 }
-                return TypedResults.NotFound();
+                response.ErrorMessages.Add($"Book with id {id} not found.");
+                return TypedResults.NotFound(response);
             }
 
             static async Task<IResult> DeleteBook([FromRoute] int id, [FromServices] IBookRepository bookRepo)
             {
-                Book result = await bookRepo.Delete(id);
-                if (result is Book)
+                APIResponse response = new APIResponse { Success = false, StatusCode = System.Net.HttpStatusCode.NotFound };
+                response.Result = await bookRepo.Delete(id);
+                if (response.Result is Book)
                 {
-                    return TypedResults.Ok(result);
+                    response.Success = true;
+                    response.StatusCode = System.Net.HttpStatusCode.OK;
+                    return TypedResults.Ok(response);
                 }
-                return TypedResults.NotFound();
+                response.ErrorMessages.Add($"Book with id {id} not found.");
+                return TypedResults.NotFound(response);
             }
         }
     }

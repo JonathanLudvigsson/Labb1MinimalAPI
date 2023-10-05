@@ -1,0 +1,49 @@
+﻿@model BookDTO
+
+@{
+    ViewData["Title"] = "Book Update";
+}
+
+<h1>Update Book</h1>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="BookUpdate">
+
+            <input asp-for="Id" hidden />
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Author" class="control-label"></label>
+                <input asp-for="Author" class="form-control" />
+            </div>
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <label asp-for="Available" class="control-label"></label>
+                    <input asp-for="Available" class="form-check-input" />
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ReleaseDate" class="control-label"></label>
+                <input asp-for="ReleaseDate" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Update" class="btn btn-primary" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="BookIndex">Back to list</a>
+</div>

@@ -9,6 +9,7 @@ namespace Book_MinimalAPI
         public MappingConfig()
         {
             CreateMap<Book, BookDTO>().ReverseMap();
+            CreateMap<Book, BookEditDTO>().ReverseMap();
         }
     }
 }
