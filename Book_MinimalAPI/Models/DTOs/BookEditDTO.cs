@@ -1,4 +1,6 @@
-﻿namespace Book_MinimalAPI.Models.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Book_MinimalAPI.Models.DTOs
 {
     public class BookEditDTO
     {

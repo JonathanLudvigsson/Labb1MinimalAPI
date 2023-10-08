@@ -4,12 +4,13 @@
     ViewData["Title"] = "BookDetails";
 }
 
-<h1>BookDetails</h1>
+<h1>Details of book</h1>
 <div>
-    <h4>BookDTO</h4>
+    <a asp-action="BookIndex" class="btn btn-warning">Return to Books Index</a>
     <hr />
+</div>
+<div>
     <dl class="row">
-
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Id);
         </dt>

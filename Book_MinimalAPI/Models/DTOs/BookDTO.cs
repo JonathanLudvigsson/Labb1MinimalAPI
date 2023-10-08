@@ -1,4 +1,6 @@
-﻿namespace Book_MinimalAPI.Models.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Book_MinimalAPI.Models.DTOs
 {
     public class BookDTO
     {
@@ -6,6 +8,8 @@
         public string Name { get; set; }
         public string Author { get; set; }
         public bool Available { get; set; }
+
+        [DataType(DataType.Date)]
         public DateTime ReleaseDate { get; set; }
     }
 }

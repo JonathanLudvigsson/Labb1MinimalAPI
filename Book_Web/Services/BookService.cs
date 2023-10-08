@@ -51,12 +51,12 @@ namespace Book_Web.Services
             });
         }
 
-        public async Task<T> GetBooksFromAuthor<T>(string name)
+        public async Task<T> GetBooksFromAuthor<T>(string authorName)
         {
             return await this.SendAsync<T>(new Models.APIRequest()
             {
                 ApiType = StaticDetails.ApiType.GET,
-                Url = StaticDetails.BookApiBase + "/api/book/" + name,
+                Url = StaticDetails.BookApiBase + "/api/book/" + authorName,
                 AccessToken = ""
             });
         }

@@ -4,8 +4,11 @@
     ViewData["Title"] = "BookCreate";
 }
 
-<h1>Create Book</h1>
-<hr />
+<h1>Create new book</h1>
+<div>
+    <a asp-action="BookIndex" class="btn btn-warning">Return to Books Index</a>
+    <hr />
+</div>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="BookCreate">
@@ -38,9 +41,6 @@
             </div>
         </form>
     </div>
-</div>
-<div>
-    <a asp-action="BookIndex">Back to List</a>
 </div>
 
 @section Scripts{

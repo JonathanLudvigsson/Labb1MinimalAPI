@@ -4,43 +4,55 @@
     ViewData["Title"] = "BookAuthor";
 }
 
-<h1>Book Author</h1>
+<h1>Search by Author</h1>
 <div>
-    <h4>BookDTO</h4>
+    <a asp-action="BookIndex" class="btn btn-warning">Return to Books Index</a>
     <hr />
-
 </div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Author)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Available)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReleaseDate)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.Id)</td>
-                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                <td>@Html.DisplayFor(modelItem => item.Author)</td>
-                <td>@Html.DisplayFor(modelItem => item.Available)</td>
-                <td>@Html.DisplayFor(modelItem => item.ReleaseDate)</td>
-            </tr>
-        }
 
-    </tbody>
-</table>
+@if (Model == null)
+{
+    <p>Author not found</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Author)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Available)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReleaseDate)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Author)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Available)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ReleaseDate)</td>
+                    <td>
+                        <a asp-action="BookDetails" class="btn btn-success" asp-route-id="@item.Id">Details</a>
+                        <a asp-action="BookUpdate" class="btn btn-warning" asp-route-id="@item.Id">Edit</a>
+                        <a asp-action="BookDelete" class="btn btn-danger" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}

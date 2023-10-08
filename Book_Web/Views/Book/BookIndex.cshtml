@@ -2,14 +2,16 @@
 @{
     ViewData["Title"] = "BookIndex";
 }
-<h1>BookIndex</h1>
+<h1>Book Index</h1>
+<hr />
 <p>
-    <a asp-action="BookCreate" class="btn btn-outline-primary">Create</a>
+    <a asp-action="BookCreate" class="btn btn-outline-primary">Create new book</a>
 </p>
-<form asp-action="BookFromAuthor" >
-    <span>Input Author</span>
+<form asp-action="BookFromAuthor" asp-route-authorName="">
+    <span>Search by Author</span>
+    <br />
     <input type="text" name="authorName" />
-    <input type="submit" value="Search" class="btn btn-primary" />
+    <input type="submit" value="Search" class="btn btn-primary"/>
 </form>
 
 <table class="table">

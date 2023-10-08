@@ -15,6 +15,7 @@ namespace Book_Web.Controllers
             _bookService = bookServiceInject;
         }
 
+        [ActionName("BookIndex")]
         public async Task<IActionResult> BookIndex()
         {
             List<BookDTO> list = new List<BookDTO>();
@@ -47,7 +48,7 @@ namespace Book_Web.Controllers
                 list = JsonConvert.DeserializeObject<List<BookDTO>>(Convert.ToString(response.Result));
                 return View(list);
             }
-            return RedirectToAction(nameof(BookIndex));
+            return View();
         }
 
         public async Task<IActionResult> BookCreate()

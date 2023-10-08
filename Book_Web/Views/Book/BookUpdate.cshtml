@@ -1,13 +1,14 @@
 ﻿@model BookDTO
 
 @{
-    ViewData["Title"] = "Book Update";
+    ViewData["Title"] = "BookUpdate";
 }
 
 <h1>Update Book</h1>
-
-<hr />
-
+<div>
+    <a asp-action="BookIndex" class="btn btn-warning">Return to Books Index</a>
+    <hr />
+</div>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="BookUpdate">
@@ -42,8 +43,4 @@
 
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="BookIndex">Back to list</a>
 </div>
