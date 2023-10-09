@@ -53,6 +53,8 @@ namespace Book_MinimalAPI
 
             app.UseAuthorization();
 
+            app.UseCors("default");
+
             var booksApi = app.MapGroup("/api/book");
 
             booksApi.MapGet("/", GetAllBooks)
