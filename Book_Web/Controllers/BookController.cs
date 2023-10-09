@@ -36,7 +36,7 @@ namespace Book_Web.Controllers
                 BookDTO model = JsonConvert.DeserializeObject<BookDTO>(Convert.ToString(response.Result));
                 return View(model);
             }
-            return NotFound();
+            return View();
         }
 
         public async Task<IActionResult> BookFromAuthor(string authorName)
@@ -78,7 +78,7 @@ namespace Book_Web.Controllers
                 BookDTO model = JsonConvert.DeserializeObject<BookDTO>(Convert.ToString(response.Result));
                 return View(model);
             }
-            return NotFound();
+            return View();
         }
 
         [HttpPost]
@@ -103,7 +103,7 @@ namespace Book_Web.Controllers
                 BookDTO model = JsonConvert.DeserializeObject<BookDTO>(Convert.ToString(response.Result));
                 return View(model);
             }
-            return NotFound();
+            return View();
         }
 
         [HttpPost]
