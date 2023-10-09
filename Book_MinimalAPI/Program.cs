@@ -32,6 +32,14 @@ namespace Book_MinimalAPI
             builder.Services.AddAutoMapper(typeof(MappingConfig).Assembly);
             builder.Services.AddScoped<IBookRepository, BookRepository>();
 
+            builder.Services.AddCors((setup) =>
+            {
+                setup.AddPolicy("default", (options) =>
+                {
+                    options.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
